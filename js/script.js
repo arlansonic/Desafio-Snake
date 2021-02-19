@@ -7,17 +7,18 @@ snake[0] = {
     y: 8 * box
 }
 let direction ='right'
-
+// Criando a posiçao da comida
 let food = {
     x: Math.floor(Math.random() * 15 + 1 ) * box,
     y: Math.floor(Math.random() * 15 + 1 ) * box
 }
 
+// Criar canvas - campo jogo
 function criarGB(){
     context.fillStyle = "lightgreen"
     context.fillRect(0, 0, 16 * box, 16 * box)
 }
-
+// Criar cobra
 function criarCobrinha(){
     for(let i = 0; i < snake.length; i++){
 
@@ -26,14 +27,14 @@ function criarCobrinha(){
 
     }
 }
-
+// Função para criar comida
 function drawFood(){
     context.fillStyle = "red"
     context.fillRect(food.x, food.y, box, box)
 }
 
 document.addEventListener('keydown', update)
-
+// Criação de direcionamento da cobra
 function update(event){
     if(event.keyCode == 37  && direction != "right") direction = "left"
     if(event.keyCode == 38 && direction != "down") direction = "up"
@@ -42,11 +43,18 @@ function update(event){
 }
 
 function iniciarJogo(){
-
+    // ajustando posicionamento - Direções
     if(snake[0].x > 15 * box && direction == "right") snake[0].x = 0
     if(snake[0].x < 0  && direction == "left") snake[0].x = 16 * box
     if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0
     if(snake[0].y < 0  && direction == "up") snake[0].y = 16 * box
+
+    for(let i = 1; i < snake.length; i ++){
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
+            clearInterval(jogo)
+            alert('Game Over')
+            }
+        }
     
     criarGB()
     criarCobrinha()    
@@ -60,7 +68,14 @@ function iniciarJogo(){
     if(direction == "up") snakeY -= box
     if(direction == "down") snakeY += box
 
-    snake.pop()
+    if(snakeX != food.x || snakeY != food.y){
+        snake.pop()
+    }else{
+        food.x = Math.floor(Math.random() * 15 + 1 ) * box
+        food.y = Math.floor(Math.random() * 15 + 1 ) * box
+    }
+
+    // snake.pop()
 
     let newHead = {
         x: snakeX,
